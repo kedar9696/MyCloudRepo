@@ -1,0 +1,71 @@
+root@localhost:~/git# docker login
+Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
+Username: kedar9696
+Password: 
+Error saving credentials: error storing credentials - err: exit status 1, out: `The connection is closed`
+
+-install the following Packages in ubuntu fixed my issue
+
+#sudo apt install gnupg2 pass
+
+-but it saved credentials in clear text. Here's the solution if you want to keep them in a password store.
+
+1) Download docker-credential-pass from https://github.com/docker/docker-credential-helpers/releases
+
+2) tar -xvf docker-credential-pass.tar.gz
+
+3) chmod u+x docker-credential-pass
+
+4) mv docker-credential-pass /usr/bin
+
+5) You will need to setup docker-credential-pass (following steps are based of https://github.com/docker/docker-credential-helpers/issues/102#issuecomment-388634452)
+
+5.1) install gpg and pass (apt-get install gpg pass)
+
+5.2) gpg --generate-key, enter your information. You should see something like this:
+
+pub   rsa3072 2018-10-07 [SC] [expires: 2020-10-06]
+      1234567890ABCDEF1234567890ABCDEF12345678
+Copy the 123... line
+
+5.3) pass init 1234567890ABCDEF1234567890ABCDEF12345678 (paste)
+
+5.4) pass insert docker-credential-helpers/docker-pass-initialized-check and set the next password "pass is initialized" (without quotes).
+
+5.5) pass show docker-credential-helpers/docker-pass-initialized-check. You should see pass is initialized.
+
+5.6) docker-credential-pass list
+
+6) create a ~/.docker/config.json with:
+
+{
+"credsStore": "pass"
+}
+7) docker login should now work
+
+Note: If you get the error "pass store is uninitialized" in future run, run the below command (it will reload the pass store in memory):
+
+pass show docker-credential-helpers/docker-pass-initialized-check
+
+It will ask your password and it will initialize the pass store.
+
+############################################################################################
+
+
+I faced the same issue in ubuntu 18.08 and this finally worked for me.. as a temporary solution.
+
+I had created this folder home/.docker/ as some solutions suggested me to create a file config.json and write default credentials in it i.e.
+
+{
+    "credsStore": "pass"
+}
+I deleted this file config.json.
+Then renamed docker-credential-secretservice to something else so that it doesn't picks up this file.
+
+sudo mv /usr/bin/docker-credential-secretservice /usr/bin/docker-credential-secretservice_x
+
+and it worked!
+
+###############################################################################################
+
+
