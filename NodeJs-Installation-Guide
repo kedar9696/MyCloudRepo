@@ -1,0 +1,25 @@
+############################### NodeJs Installation Guide ##############################################
+
+Step 1 : Visit Nodejs Official Website https://nodejs.org
+
+Step 2 : Download LTS version (any) as per your requirement.(ex: node-v14.15.1-linux-x64.tar.xz)
+
+Step 3 : Untar & Uncompress that file
+
+Step 4 : move that file (uncompressed)  from Downloads to /usr/local/share/packages directory.
+         note: if packages directory is not available then create it ( only for organized manner)
+
+Step 5 : Go inside that file (/usr/local/share/packages/node-v14.15.1-linux-x64/lib) and create softlink of node_modules at /usr/local/lib 
+         location
+         # ln -s node_modules /usr/local/lib
+
+Step 6 : Export Path in /etc/environment file
+
+    	export NODEJS_HOME=/usr/local/share/packages/node-v14.15.1-linux-x64
+	export PATH=$HOME/.local/bin:$bin:$PATH:$NODEJS_HOME/bin
+
+Step 6 : udate that file
+
+   	# source /etc/environment
+
+Done
