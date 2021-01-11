@@ -1,0 +1,11 @@
+network:
+ version: 2   
+ ethernets:
+  enp3s0:
+   dhcp4: no
+   addresses: [10.13.10.43/24]
+   gateway4: 10.13.10.2
+   nameservers: 
+    addresses: [10.13.10.17,8.8.8.8]
+      
+     
